@@ -9,8 +9,6 @@ interface DashboardPageProps {
   carregandoLojas: boolean;
 }
 
-// REMOVIDO DAQUI: const [isAnimating, setIsAnimating] = useState(false);
-
 const DashboardPage: React.FC<DashboardPageProps> = ({ lojas, carregandoLojas }) => {
   const { sidebarOpen, setSidebarOpen } = useDashboardStore();
   
@@ -22,6 +20,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ lojas, carregandoLojas })
       
       <div className="w-full max-w-400 flex flex-col flex-1 min-h-0 relative">
         
+        {/* BOTÃO FLUTUANTE DE ABRIR FILTROS */}
         <AnimatePresence>
           {!sidebarOpen && (
             <motion.div
@@ -44,14 +43,34 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ lojas, carregandoLojas })
         </AnimatePresence>
 
         <div className="flex-1 flex min-h-0 relative w-full flex-nowrap overflow-hidden">
+          
+          {/* =========================================================
+              INÍCIO DA NOVA ADIÇÃO: VÉU ESCURO PARA MOBILE
+              ========================================================= */}
+          <AnimatePresence>
+            {sidebarOpen && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setSidebarOpen(false)} 
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+              />
+            )}
+          </AnimatePresence>
+          {/* =========================================================
+              FIM DA NOVA ADIÇÃO
+              ========================================================= */}
+
           <DashboardSidebar 
             onAnimationStart={() => setIsAnimating(true)}
             onAnimationComplete={() => setIsAnimating(false)}
             lojas={lojas} 
             carregandoLojas={carregandoLojas} 
           />
+          
           <div className="flex-1 min-w-0 relative h-full overflow-hidden">
-              {/* CORREÇÃO: Passando a prop para o Main reconhecer o estado */}
               <DashboardMain isAnimating={isAnimating} />
           </div>
         </div>

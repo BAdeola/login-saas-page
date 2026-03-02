@@ -30,20 +30,22 @@ export const AnaliseSintetica: React.FC<AnaliseSinteticaProps> = ({ isSidebarAni
             <h4 className="text-system-text-primary text-lg font-bold uppercase mb-4 w-full text-center">
               Distribuição de Saídas por Loja
             </h4>
-            <div className="w-full overflow-hidden pb-4">
-              {/* CORREÇÃO: Altura fixa com h-[350px] no mobile e h-[400px] no desktop */}
-              <div className="w-full h-87.5 md:h-100 relative">
-                {/* O gráfico preenche 100% do espaço relativo estático */}
+            
+            {/* CONTAINER DE SCROLL HORIZONTAL */}
+            <div className="w-full overflow-x-auto custom-scrollbar pb-4">
+              {/* CORREÇÃO: Aumentamos de 500px para 700px. Isso dá espaço de sobra para as legendas compridas! */}
+              <div className="min-w-175 w-full h-87.5 md:h-100 relative">
                 <div className="absolute inset-0">
                   <ResponsiveContainer width="100%" height="100%" debounce={50}>
-                    <PieChart>
+                    {/* Margens normais agora */}
+                    <PieChart margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                       <Pie
                         isAnimationActive={!isSidebarAnimating} 
                         data={dadosSinteticos.dados} 
                         dataKey="ValorTotal" 
                         nameKey="Loja" 
                         cx="50%" cy="50%" 
-                        outerRadius={120}
+                        outerRadius={100} /* Podemos voltar para 100 já que o canvas cresceu */
                         stroke="none" 
                         style={{ outline: 'none' }} 
                         activeShape={{ stroke: 'none' }}
@@ -126,50 +128,52 @@ export const AnaliseSintetica: React.FC<AnaliseSinteticaProps> = ({ isSidebarAni
             Evolução de Saídas no Período
           </h4>
           
-          {/* CORREÇÃO: Altura rígida h-[350px] e md:h-[450px] garante que o gráfico não encolha/estique */}
-          <div className="w-full h-87.5 md:h-112.5 relative">
-            <div className="absolute inset-0">
-              <ResponsiveContainer width="100%" height="100%" debounce={50}>
-                {/* Ajuste de margem para evitar cortes */}
-                <LineChart data={dadosSinteticos.dados} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                  <CartesianGrid 
-                    strokeDasharray="3 3" 
-                    stroke="var(--chart-grid)" 
-                    vertical={false}
-                  />
-                  <XAxis 
-                    dataKey="Data" 
-                    stroke="var(--chart-axis)" 
-                    tickFormatter={(tick) => new Date(tick).toLocaleDateString('pt-BR')} 
-                  />
-                  <YAxis 
-                    stroke="var(--chart-axis)" 
-                    tickFormatter={(tick) => formatarMoeda(tick)} 
-                    width={90} 
-                  />
-                  <Tooltip 
-                    formatter={(value: any) => formatarMoeda(Number(value))}
-                    labelFormatter={(label) => new Date(label).toLocaleDateString('pt-BR')}
-                    contentStyle={{ 
-                      backgroundColor: 'var(--chart-tooltip-bg)', 
-                      border: 'none', 
-                      borderRadius: '8px', 
-                      color: 'var(--text-primary)' 
-                    }}
-                  />
-                  <Legend wrapperStyle={{ paddingTop: '20px' }} />
-                  <Line
-                    isAnimationActive={!isSidebarAnimating}
-                    type="monotone" 
-                    dataKey="ValorTotal" 
-                    name="Valor Total de Saída" 
-                    stroke="var(--chart-line)" 
-                    strokeWidth={3} 
-                    dot={{ r: 6, fill: "var(--chart-line)", strokeWidth: 0 }} 
-                    activeDot={{ r: 8, stroke: "none"}} 
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+          {/* CONTAINER DE SCROLL HORIZONTAL */}
+          <div className="w-full overflow-x-auto custom-scrollbar pb-4">
+            {/* CORREÇÃO: Largura mínima rígida para proteger o gráfico e criar o scroll lateral */}
+            <div className="min-w-175 w-full h-87.5 md:h-112.5 relative">
+              <div className="absolute inset-0">
+                <ResponsiveContainer width="100%" height="100%" debounce={50}>
+                  <LineChart data={dadosSinteticos.dados} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                    <CartesianGrid 
+                      strokeDasharray="3 3" 
+                      stroke="var(--chart-grid)" 
+                      vertical={false}
+                    />
+                    <XAxis 
+                      dataKey="Data" 
+                      stroke="var(--chart-axis)" 
+                      tickFormatter={(tick) => new Date(tick).toLocaleDateString('pt-BR')} 
+                    />
+                    <YAxis 
+                      stroke="var(--chart-axis)" 
+                      tickFormatter={(tick) => formatarMoeda(tick)} 
+                      width={90} 
+                    />
+                    <Tooltip 
+                      formatter={(value: any) => formatarMoeda(Number(value))}
+                      labelFormatter={(label) => new Date(label).toLocaleDateString('pt-BR')}
+                      contentStyle={{ 
+                        backgroundColor: 'var(--chart-tooltip-bg)', 
+                        border: 'none', 
+                        borderRadius: '8px', 
+                        color: 'var(--text-primary)' 
+                      }}
+                    />
+                    <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                    <Line
+                      isAnimationActive={!isSidebarAnimating}
+                      type="monotone" 
+                      dataKey="ValorTotal" 
+                      name="Valor Total de Saída" 
+                      stroke="var(--chart-line)" 
+                      strokeWidth={3} 
+                      dot={{ r: 6, fill: "var(--chart-line)", strokeWidth: 0 }} 
+                      activeDot={{ r: 8, stroke: "none"}} 
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         </div>

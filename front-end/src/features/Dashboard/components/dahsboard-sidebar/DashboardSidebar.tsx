@@ -2,14 +2,9 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDashboardSidebar } from './hooks/useDashboardSidebar';
 import { ThemeToggle } from '../../../../components/ThemeTogle/ThemeToggle';
+import type { SidebarProps } from './interfaces';
 
-interface SidebarProps {
-  lojas: any[];
-  carregandoLojas: boolean;
-  // Novas props para sincronizar com o congelamento do gráfico
-  onAnimationStart?: () => void;
-  onAnimationComplete?: () => void;
-}
+
 
 export const DashboardSidebar: React.FC<SidebarProps> = ({ 
   lojas, 
@@ -33,17 +28,17 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
     <AnimatePresence initial={false}>
       {sidebarOpen && (
         <motion.aside 
-          // Dispara o congelamento do gráfico ao iniciar o movimento
           onAnimationStart={onAnimationStart}
-          // Libera o gráfico para recalcular apenas quando o movimento parar
           onAnimationComplete={onAnimationComplete}
-          initial={{ width: 0, opacity: 0, marginRight: 0 }}
-          animate={{ width: "auto", opacity: 1, marginRight: 24 }} 
-          exit={{ width: 0, opacity: 0, marginRight: 0 }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
+          initial={{ width: 0, marginRight: 0 }}
+          animate={{ width: "auto", marginRight: 24 }} 
+          exit={{ width: 0, marginRight: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }} 
           className="absolute md:relative z-50 h-full overflow-hidden shrink-0 left-0 top-0"
         >
-          <div className="w-[calc(100vw-2rem)] md:w-100 h-full backdrop-blur-2xl bg-surface-primary border border-system-border-default shadow-2xl rounded-3xl p-6 md:p-8 flex flex-col relative">
+          {/* CORREÇÃO AQUI: Trocamos shadow-2xl por 'shadow-none md:shadow-2xl'. 
+              Isso impede que a sombra seja "cortada" no mobile e gere a borda preta. */}
+          <div className="w-[calc(100vw-2rem)] md:w-100 h-full backdrop-blur-2xl bg-surface-primary border border-system-border-default shadow-none md:shadow-2xl rounded-3xl p-6 md:p-8 flex flex-col relative">
             
             {/* TOPO: DARK MODE (ESQUERDA) | MINIMIZAR (DIREITA) */}
             <div className="w-full flex justify-between items-center mb-6">
@@ -78,7 +73,7 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
               </h2>
             </div>
 
-            {/* FORMULÁRIO COM PX-6 */}
+            {/* FORMULÁRIO */}
             <form onSubmit={handleAnalisar} className="flex-1 flex flex-col gap-6 overflow-y-auto custom-scrollbar px-6 pr-2">
               <div className="space-y-6">
                 

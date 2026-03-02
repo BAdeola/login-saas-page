@@ -69,31 +69,37 @@ export const AnaliseAnalitica: React.FC<Props> = ({ onPageChange }) => {
 
       {/* PAGINAÇÃO FLUTUANTE (ILHA) */}
       {totalPaginas > 1 && (
-        <div className="sticky bottom-4 z-20 w-[95%] mx-auto flex items-center justify-between bg-surface-primary border border-brand/30 backdrop-blur-xl rounded-2xl p-4 shadow-2xl">
+        <div className="sticky bottom-4 z-20 w-[95%] md:w-[90%] mx-auto flex items-center justify-center md:justify-between bg-surface-primary border border-brand/30 backdrop-blur-xl rounded-2xl p-3 md:p-4 shadow-2xl">
+  
+          {/* TEXTO: Escondido no Mobile, visível no Desktop */}
           <p className="text-sm text-system-text-secondary hidden md:block">
             Mostrando <span className="text-brand font-bold">{startIndex + 1}</span> até <span className="text-brand font-bold">
               {Math.min(startIndex + ITENS_POR_PAGINA, dadosAnaliticos.length)}
-            </span> de <span className="font-bold">{dadosAnaliticos.length}</span> resultados
+            </span> de <span className="font-bold">{dadosAnaliticos.length}</span> registros
           </p>
           
-          <div className="flex items-center gap-3">
+          {/* CONTROLES: Ajustados para não quebrar no celular */}
+          <div className="flex items-center justify-between w-full md:w-auto gap-2 md:gap-3">
+            
             <button 
               onClick={handlePrevPage} 
-              className="px-5 py-2.5 bg-brand/10 hover:bg-brand/20 text-brand border border-brand/20 rounded-xl font-bold transition-all"
+              /* flex-1 no mobile para preencher o espaço, padding menor, texto em linha única */
+              className="flex-1 md:flex-none px-3 md:px-5 py-2.5 bg-brand-fade hover:bg-brand-hover text-brand rounded-xl font-bold transition-all text-sm md:text-base whitespace-nowrap"
             >
               Anterior
             </button>
             
-            <span className="bg-surface-tertiary text-system-text-primary px-4 py-2 rounded-lg border border-brand/10 font-bold">
+            <span className="bg-surface-tertiary text-system-text-primary px-4 py-2.5 rounded-lg font-bold text-sm md:text-base whitespace-nowrap shrink-0">
               {paginaAtual} / {totalPaginas}
             </span>
 
             <button 
               onClick={handleNextPage} 
-              className="px-5 py-2.5 bg-brand/10 hover:bg-brand/20 text-brand border border-brand/20 rounded-xl font-bold transition-all"
+              className="flex-1 md:flex-none px-3 md:px-5 py-2.5 bg-brand-fade hover:bg-brand-hover text-brand rounded-xl font-bold transition-all text-sm md:text-base whitespace-nowrap"
             >
               Próxima
             </button>
+            
           </div>
         </div>
       )}

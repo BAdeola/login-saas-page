@@ -11,7 +11,8 @@
 
 .recharts-wrapper {
   user-select: none;
-  touch-action: none;
+  /* pan-x e pan-y liberam o navegador para rolar a tela normalmente */
+  touch-action: pan-x pan-y; 
 }
 
 @theme {
