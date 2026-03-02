@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #042f2e;
+  overflow-x: hidden; /* Vital para o AnimatePresence não quebrar o layout */
+  width: 100vw;
+  height: 100vh;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
