@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import LoginScreen from "../pages/login-screen/LoginScreen";
 import DashBoardPageScreen from "../pages/dashboard-screen/DashBoardPageScreen";
+import { RequireAuth } from "./RequireAuth";
 
 export const Routers = () => {
     const location = useLocation();
@@ -10,7 +11,14 @@ export const Routers = () => {
         <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<LoginScreen />} />
-                <Route path="/dashboards" element={<DashBoardPageScreen />} />
+                <Route 
+                    path="/dashboards" 
+                    element={
+                        <RequireAuth>
+                            <DashBoardPageScreen />
+                        </RequireAuth>
+                    } 
+                />
             </Routes>
         </AnimatePresence>
     );

@@ -1,38 +1,27 @@
 import { create } from 'zustand';
-import { DashboardService, type FiltrosAnalise } from '../services/DashboardService';
+import { DashboardService, type FiltrosAnalise } from '../../services/DashboardService';
+import type { ItemAnalitico } from './interfaces';
 
-// Tipagens do que vem do seu SQL Server
-export interface ItemAnalitico {
-  Loja: string;
-  NumSaida: string;
-  Data: string;
-  Produto: string;
-  Unidade: string;
-  Quantidade: number;
-  ValorUnitario: number;
-  ValorTotal: number;
-}
-
+// 1. PLANTA BAIXA: A Interface TypeScript
 interface DashboardState {
-  // O que o usuário seleciona na tela
   filtros: FiltrosAnalise;
   setFiltros: (novosFiltros: Partial<FiltrosAnalise>) => void;
 
-  // Controle de tela
   loading: boolean;
   error: string | null;
   showResults: boolean;
+  sidebarOpen: boolean;
+  setSidebarOpen: (isOpen: boolean) => void;
 
-  // Os dados que chegam do banco
   dadosAnaliticos: ItemAnalitico[];
   dadosSinteticos: { tipo: 'PIZZA_GERAL' | 'LINHA_LOJA'; dados: any[] } | null;
 
-  // Ações
   gerarAnalise: () => Promise<void>;
   limparDados: () => void;
 }
 
 export const useDashboardStore = create<DashboardState>((set, get) => ({
+  // 2. TIJOLOS INICIAIS: Os valores padrão quando o app abre
   filtros: {
     loja: '',
     dataInicio: '',
@@ -43,6 +32,13 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
   loading: false,
   error: null,
   showResults: false,
+
+  // ======== NOVA VARIÁVEL AQUI ========
+  // A sidebar sempre começa aberta
+  sidebarOpen: true,
+  setSidebarOpen: (isOpen) => set({ sidebarOpen: isOpen }),
+  // =====================================
+
   dadosAnaliticos: [],
   dadosSinteticos: null,
 
@@ -53,7 +49,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
   gerarAnalise: async () => {
     const { filtros } = get();
     
-    // Validação básica
     if (!filtros.loja || !filtros.dataInicio || !filtros.dataFim) {
       set({ error: "Preencha todos os campos obrigatórios." });
       return;
@@ -65,11 +60,16 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
       const resposta = await DashboardService.buscarAnalise(filtros);
 
       if (filtros.tipoAnalise === 'analitico') {
-        set({ dadosAnaliticos: resposta.dados, showResults: true });
+        // ======== NOVA VARIÁVEL AQUI ========
+        // Fechamos a sidebar ao mostrar o resultado!
+        set({ dadosAnaliticos: resposta.dados, showResults: true, sidebarOpen: false });
       } else {
+        // ======== NOVA VARIÁVEL AQUI ========
+        // Fechamos a sidebar ao mostrar o resultado!
         set({ 
           dadosSinteticos: { tipo: resposta.tipo, dados: resposta.dados }, 
-          showResults: true 
+          showResults: true,
+          sidebarOpen: false 
         });
       }
     } catch (error: any) {
@@ -79,10 +79,20 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     }
   },
 
-  limparDados: () => set({ 
-    showResults: false, 
-    dadosAnaliticos: [], 
+  limparDados: () => set({
+    showResults: false,
     dadosSinteticos: null,
-    filtros: { ...get().filtros, loja: '', dataInicio: '', dataFim: '' } // Opcional: limpar os inputs também
+    dadosAnaliticos: [],
+    error: null,
+    // ======== NOVA VARIÁVEL AQUI ========
+    // Ao limpar a tela (quando o usuário sai/volta), a sidebar abre de novo
+    sidebarOpen: true, 
+    // =====================================
+    filtros: {
+      loja: '',
+      dataInicio: '',
+      dataFim: '',
+      tipoAnalise: 'sintetico'
+    }
   }),
 }));

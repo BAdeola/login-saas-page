@@ -1,15 +1,146 @@
 @import "tailwindcss";
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #042f2e;
-  overflow-x: hidden; /* Vital para o AnimatePresence não quebrar o layout */
-  width: 100vw;
-  height: 100vh;
+.recharts-cartesian-grid, 
+.recharts-cartesian-axis, 
+.recharts-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  will-change: transform;
 }
 
-#root {
-  width: 100%;
-  height: 100%;
+.recharts-wrapper {
+  user-select: none;
+  touch-action: none;
+}
+
+@theme {
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-hover: var(--surface-hover);
+  --color-system-text-primary: var(--text-primary);
+  --color-system-text-accent: var(--text-accent);
+  --color-system-border-default: var(--border-default);
+
+  /* Mapeamento para o Tailwind v4 reconhecer suas classes */
+  --color-brand: var(--brand-primary);
+  --color-brand-fade: var(--brand-primary-fade);
+  --color-brand-hover: var(--brand-primary-hover);
+  --color-brand-border: var(--brand-primary-border);
+
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-tertiary: var(--surface-tertiary);
+  --color-surface-hover: var(--surface-hover);
+
+  --color-system-text-primary: var(--text-primary);
+  --color-system-text-secondary: var(--text-secondary);
+  --color-system-text-muted: var(--text-muted);
+  --color-system-text-accent: var(--text-accent);
+
+  --color-system-border-subtle: var(--border-subtle);
+  --color-system-border-default: var(--border-default);
+  --color-system-border-strong: var(--border-strong);
+
+  --color-system-error: var(--error-color);
+  --color-system-error-bg: var(--error-bg);
+  --color-system-error-hover: var(--error-hover);
+
+  --color-chart-line: var(--chart-line);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+  --color-chart-tooltip: var(--chart-tooltip-bg);
+
+  --color-brand: var(--brand-primary);
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-system-text-primary: var(--text-primary);
+  --color-system-text-muted: var(--text-muted);
+
+  /* Variável para o gradiente de fundo */
+  --background-image-gradient-main: linear-gradient(to bottom right, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+}
+
+@layer base {
+  :root {
+    --chart-line: #34d399;
+    --chart-grid: rgba(255, 255, 255, 0.1);
+    --chart-axis: #a7f3d0;
+    --chart-tooltip-bg: #064e3b;
+
+    color-scheme: dark; /* Força ícones de calendário claros no modo dark */
+    --brand-primary: #10b981;
+    --text-primary: #ecfdf5;
+    --surface-primary: rgba(255, 255, 255, 0.05);
+    /* MODO ESCURO (Suas cores originais aqui) */
+    --bg-gradient-start: #022c22;
+    --bg-gradient-mid: #042f2e;
+    --bg-gradient-end: #171717;
+    --surface-primary: rgba(255, 255, 255, 0.05);
+    --surface-secondary: rgba(0, 0, 0, 0.2);
+    --surface-tertiary: rgba(0, 0, 0, 0.4);
+    --surface-hover: rgba(255, 255, 255, 0.1);
+    --text-primary: #ecfdf5;
+    --text-secondary: rgba(209, 250, 229, 0.5);
+    --text-muted: rgba(209, 250, 229, 0.4);
+    --text-accent: #34d399;
+    --brand-primary: #10b981;
+    --brand-primary-fade: rgba(16, 185, 129, 0.1);
+    --brand-primary-hover: rgba(16, 185, 129, 0.2);
+    --brand-primary-border: rgba(16, 185, 129, 0.3);
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-default: rgba(255, 255, 255, 0.1);
+    --error-color: #f87171;
+    --error-bg: rgba(248, 113, 113, 0.1);
+    --error-hover: rgba(248, 113, 113, 0.2);
+  }
+
+  .light {
+    --chart-line: #059669; /* Verde mais escuro para contraste no branco */
+    --chart-grid: rgba(0, 0, 0, 0.08);
+    --chart-axis: #475569;
+    --chart-tooltip-bg: #ffffff;
+
+    /* Gradiente de fundo: Slate mais nítido para não parecer "sujo" */
+    --bg-gradient-start: #f1f5f9; /* Slate 100 */
+    --bg-gradient-mid: #e2e8f0;   /* Slate 200 */
+    --bg-gradient-end: #cbd5e1;   /* Slate 300 */
+
+    color-scheme: light; /* Força ícones de calendário escuros no modo light */
+    --brand-primary: #059669;
+    --text-primary: #0f172a;
+    --surface-primary: #ffffff;
+    --surface-secondary: #f1f5f9;
+    --surface-tertiary: #e2e8f0;
+
+    /* Superfícies: Brancos sólidos para dar contraste com o fundo */
+    --surface-primary: #ffffff; 
+    --surface-secondary: #f8fafc; 
+    --surface-tertiary: #f1f5f9;
+    --surface-hover: rgba(0, 0, 0, 0.04);
+
+    /* Textos: Tons escuros profundos (Quase preto) para leitura perfeita */
+    --text-primary: #0f172a;      /* Slate 900 */
+    --text-secondary: #334155;    /* Slate 700 */
+    --text-muted: #64748b;        /* Slate 500 */
+    --text-accent: #059669;       /* Verde Esmeralda forte */
+
+    /* Bordas: Precisam ser mais escuras no modo claro para definir os campos */
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --border-default: rgba(0, 0, 0, 0.12);
+    --border-strong: rgba(0, 0, 0, 0.2);
+
+    /* Gráficos no modo claro */
+    --chart-tooltip-bg: #ffffff;
+    --chart-grid: rgba(0, 0, 0, 0.08);
+    --chart-axis: #475569;
+  }
+}
+
+.recharts-responsive-container {
+  overflow: hidden !important;
+}
+
+/* Garante que a área main não crie scroll horizontal durante a animação da sidebar */
+main {
+  overflow-x: hidden !important;
 }

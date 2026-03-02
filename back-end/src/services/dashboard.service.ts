@@ -20,7 +20,7 @@ export class DashboardService {
         i.unisai as Unidade, 
         CAST(i.quanti AS numeric(11, 2)) as Quantidade, 
         CAST((i.qtdsai * i.cusmed) AS NUMERIC(11,2)) as ValorUnitario, 
-        c.valtot as ValorTotal
+        CAST(((i.qtdsai * i.cusmed) * i.quanti) AS NUMERIC(11,2)) as ValorTotal
       FROM cadsai c
       INNER JOIN cadsai1 i ON c.numsai = i.numsai
       INNER JOIN cadcli cl ON c.codcli = cl.codcli

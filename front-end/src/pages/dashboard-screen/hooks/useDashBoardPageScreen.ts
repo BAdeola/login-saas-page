@@ -1,11 +1,22 @@
 import { useState, useEffect } from "react";
-// Importe a interface Loja que criamos no seu Service
 import { LojaService, type Loja } from "../../../services/LojaService"; 
+// 1. Importe a sua Store Global aqui
+import { useDashboardStore } from "../../../store/dashboard/useDashboardStore"; 
 
 export const useDashboardLojas = () => {
-    // 1. O SEGREDO ESTÁ AQUI: <Loja[]>
     const [lojas, setLojas] = useState<Loja[]>([]);
     const [carregandoLojas, setCarregandoLojas] = useState(true);
+
+    // 2. Puxa a função de limpeza do Zustand
+    const { limparDados } = useDashboardStore();
+
+    useEffect(() => {
+        limparDados(); // Limpa tudo quando ENTRAR na tela
+
+        return () => {
+            limparDados(); // Limpa tudo quando SAIR da tela
+        };
+    }, []); // Array vazio garante que só roda na entrada e saída
 
     useEffect(() => {
         const carregarLojas = async () => {
@@ -22,5 +33,6 @@ export const useDashboardLojas = () => {
         carregarLojas();
     }, []);
 
+    // 3. Retorna apenas o que a tela precisa para desenhar os filtros
     return { lojas, carregandoLojas };
 };
