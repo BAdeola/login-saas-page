@@ -11,7 +11,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({ user: null });
         localStorage.removeItem('@DDCD:user');
-        window.location.href = '/'; // Garante limpeza total
+        window.location.href = '/dd/'; // Garante limpeza total
       },
     }),
     { name: '@DDCD:user' } // Sincroniza o Zustand com o LocalStorage automaticamente

@@ -19,6 +19,8 @@ export const useLogin = () => {
     try {
       const data = await AuthService.login(apelid, senha);
       // No seu useLogin.ts, dentro do handleLogin:
+
+      console.log("📦 Dados que chegaram do Back-end:", data);
       if (data.sucesso) {
         const usuarioParaSalvar = {
           ...data.usuario,
@@ -28,7 +30,7 @@ export const useLogin = () => {
         navigate("/dashboards");
       }
     } catch (error: any) {
-      setErrorMessage(error.message);
+      setErrorMessage(error.response?.data?.message || "Usuário ou senha inválidos");
     } finally {
       setLoading(false);
     }

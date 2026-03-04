@@ -1,7 +1,9 @@
 export interface User {
-  id: string;
-  nome: string;
-  token: string;
+  id?: number;
+  token?: string;
+  nomusu?: string;
+  apelid?: string; 
+  nome?: string;
 }
 
 export interface AuthState {

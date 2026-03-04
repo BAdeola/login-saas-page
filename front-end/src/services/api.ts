@@ -4,6 +4,7 @@ import { useAuthStore } from '../store/auth/useAuthStore';
 // 1. Instância centralizada
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  
 });
 
 // 2. Interceptor de Requisição (Já está correto!)
@@ -19,12 +20,14 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      useAuthStore.getState().logout(); 
+    // Verifica se o erro NÃO foi na rota de login
+    const isLoginRequest = error.config?.url?.includes('/login');
+
+    if ((error.response?.status === 401 || error.response?.status === 403) && !isLoginRequest) {
+      // Só desloga se o token expirar ou for inválido, mas NÃO no erro de senha
+      //useAuthStore.getState().logout(); 
     }
-    // Melhoria: Retornar uma mensagem de erro amigável do backend
-    const message = error.response?.data?.erro || error.message || "Erro na comunicação";
-    return Promise.reject(new Error(message));
+    return Promise.reject(error);
   }
 );
 

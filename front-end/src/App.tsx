@@ -5,7 +5,7 @@ import { Routers } from './routers/Routers'
 function App() {
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/dd">
       <Routers />
     </BrowserRouter>
   )
