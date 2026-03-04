@@ -111,7 +111,7 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({
 
               </div>
 
-              <div className="mt-auto flex flex-col gap-3 pt-6 pb-2 px-1">
+              <div className="flex flex-col gap-3 pt-2">
                 {error && (
                   <div className="text-system-error text-sm font-bold text-center bg-system-error-bg py-2 rounded-lg border border-system-error-hover">
                     ⚠️ {error}
