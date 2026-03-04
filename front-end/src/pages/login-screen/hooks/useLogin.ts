@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthService } from '../../../services/api';
+import { AuthService } from '../../../services/api'; // Importação agora deve bater com o export
+import { useAuthStore } from '../../../store/auth/useAuthStore'; // Importante para salvar o estado
 
 export const useLogin = () => {
   const [apelid, setApelid] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  // Novos estados para o Modal de Erro
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const isErrorOpen = !!errorMessage; // Se tiver mensagem, está aberto
-
+  
   const navigate = useNavigate();
+  const setUser = useAuthStore((state) => state.setUser); // Função do seu Zustand
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,13 +18,17 @@ export const useLogin = () => {
 
     try {
       const data = await AuthService.login(apelid, senha);
+      // No seu useLogin.ts, dentro do handleLogin:
       if (data.sucesso) {
-        localStorage.setItem('@DDCD:user', JSON.stringify(data.usuario));
+        const usuarioParaSalvar = {
+          ...data.usuario,
+          token: data.token // Agora o dado existe vindo do back!
+        };
+        setUser(usuarioParaSalvar);
         navigate("/dashboards");
       }
     } catch (error: any) {
-      // Em vez de alert(), setamos a mensagem no estado
-      setErrorMessage(error.message || "Erro inesperado ao tentar logar.");
+      setErrorMessage(error.message);
     } finally {
       setLoading(false);
     }
@@ -38,7 +41,7 @@ export const useLogin = () => {
     senha, setSenha,
     loading,
     errorMessage: errorMessage || '',
-    isErrorOpen,
+    isErrorOpen: !!errorMessage,
     closeError,
     handleLogin
   };

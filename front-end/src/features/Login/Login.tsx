@@ -17,7 +17,7 @@ const Login: React.FC<LoginProps> = ({ apelid, setApelid, senha, setSenha, loadi
               className="h-15 w-auto object-contain drop-shadow-lg" // h-12 define a altura. Ajuste se quiser maior ou menor!
             />
             <h2 className="text-2xl sm:text-3xl font-bold text-emerald-50 text-center leading-tight whitespace-nowrap">
-              D&D Análises
+              D&D Alimentos
             </h2>
           </div>
           <p className="text-emerald-100/60 mb-8 text-sm text-center">Entre para acessar seus dados</p>

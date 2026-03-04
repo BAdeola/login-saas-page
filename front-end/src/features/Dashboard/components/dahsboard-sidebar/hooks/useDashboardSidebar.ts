@@ -5,11 +5,10 @@ import { useDashboardStore } from '../../../../../store/dashboard/useDashboardSt
 export const useDashboardSidebar = () => {
   const navigate = useNavigate();
   
-  // Puxamos tudo o que a Sidebar precisa da Store Global
   const { 
     filtros, 
     setFiltros, 
-    gerarAnalise, 
+    buscarTabela, // Mudamos aqui!
     error, 
     loading, 
     limparDados, 
@@ -17,7 +16,6 @@ export const useDashboardSidebar = () => {
     setSidebarOpen 
   } = useDashboardStore();
 
-  // Memória para o nome do usuário vindo do Crachá (localStorage)
   const nomeUsuario = useMemo(() => {
     const usuarioSalvo = localStorage.getItem('@DDCD:user');
     if (usuarioSalvo) {
@@ -31,13 +29,12 @@ export const useDashboardSidebar = () => {
     return 'Usuário';
   }, []);
 
-  // Função para disparar a busca
   const handleAnalisar = (e: React.FormEvent) => {
     e.preventDefault();
-    gerarAnalise(); 
+    // Agora ele dispara apenas a busca da tabela inicial
+    buscarTabela(); 
   };
 
-  // Função para sair do sistema (Logoff)
   const handleLogout = () => {
     localStorage.removeItem('@DDCD:user'); 
     limparDados(); 

@@ -4,7 +4,7 @@ import sql from 'mssql';
 export class DashboardService {
   
   // --- 1. ANÁLISE ANALÍTICA (Tabela de Itens Detalhada) ---
-  async buscarAnalitico(codcli: string | number, dataInicio: string, dataFim: string) {
+  async buscarSaidas(codcli: string | number, dataInicio: string, dataFim: string) {
     const pool = await getConnection();
     const request = pool.request();
 
@@ -16,13 +16,8 @@ export class DashboardService {
         cl.nomfan as Loja, 
         c.numsai as NumSaida, 
         c.datsai as Data, 
-        i.nompro as Produto, 
-        i.unisai as Unidade, 
-        CAST(i.quanti AS numeric(11, 2)) as Quantidade, 
-        CAST((i.qtdsai * i.cusmed) AS NUMERIC(11,2)) as ValorUnitario, 
-        CAST(((i.qtdsai * i.cusmed) * i.quanti) AS NUMERIC(11,2)) as ValorTotal
+        c.valtot as ValorTotal
       FROM cadsai c
-      INNER JOIN cadsai1 i ON c.numsai = i.numsai
       INNER JOIN cadcli cl ON c.codcli = cl.codcli
       WHERE c.datsai BETWEEN @dataInicio AND @dataFim
     `;
@@ -39,8 +34,30 @@ export class DashboardService {
     return result.recordset;
   }
 
+  async buscarItens(numsai: number){
+    const pool = await getConnection();
+    const request = pool.request();
+
+    request.input('numsai', sql.Int, numsai);
+
+    const query = `
+      SELECT
+        nompro as Produto, 
+        unisai as Unidade, 
+        CAST(quanti AS numeric(11, 2)) as Quantidade, 
+        CAST((qtdsai * cusmed) AS NUMERIC(11,2)) as ValorUnitario, 
+        CAST(((qtdsai * cusmed) * quanti) AS NUMERIC(11,2)) as ValorTotal
+      FROM cadsai1
+      WHERE numsai = @numsai
+      order by ValorTotal ASC
+    `;
+
+    const result = await request.query(query);
+    return result.recordset;
+  }
+
   // --- 2. ANÁLISE SINTÉTICA (Gráficos e Resumo) ---
-  async buscarSintetico(codcli: string | number, dataInicio: string, dataFim: string) {
+  async buscarGrafico(codcli: string | number, dataInicio: string, dataFim: string) {
     const pool = await getConnection();
     const request = pool.request();
 
