@@ -29,6 +29,8 @@ export const useTabelaGeral = ({ onPageChange }: UseTabelaGeralProps) => {
     setItemSelecionado(null);
   }, [saidaSelecionada]);
 
+  const valorTotalGeral = dadosTabela.length > 0 ? (dadosTabela[0] as any).ValorGeral : 0;
+  
   const totalPaginas = Math.ceil(dadosTabela.length / ITENS_POR_PAGINA);
   const startIndex = (paginaAtual - 1) * ITENS_POR_PAGINA;
   const dadosPaginados = dadosTabela.slice(startIndex, startIndex + ITENS_POR_PAGINA);
@@ -62,6 +64,7 @@ export const useTabelaGeral = ({ onPageChange }: UseTabelaGeralProps) => {
     dadosItens,
     loadingItens,
     buscarItens,
+    valorTotalGeral,
 
     // === EXPORTANDO AS NOVAS VARIÁVEIS ===
     itemSelecionado,

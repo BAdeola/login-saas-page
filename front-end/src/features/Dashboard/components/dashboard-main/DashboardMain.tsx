@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDashboardStore } from '../../../../store/dashboard/useDashboardStore';
-import { Graficos } from './components/analise-sintetica/Graficos';
+import { Graficos } from './components/analise-graficos/Graficos';
 import { TabelaGeral } from './components/tabela-geral/TabelaGeral';
 
 interface DashboardMainProps {

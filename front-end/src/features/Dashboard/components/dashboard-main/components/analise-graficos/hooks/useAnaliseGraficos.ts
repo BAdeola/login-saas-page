@@ -25,13 +25,11 @@ export const useAnaliseSintetica = () => {
   };
 
   // 4. Filtra a tabela geral para mostrar apenas as saídas daquele dia exato
-  const dadosDoDia = dataSelecionada
-    ? dadosTabela.filter((item) => {
-        const dataItem = new Date(item.Data).toLocaleDateString('pt-BR');
-        const dataFiltro = new Date(dataSelecionada).toLocaleDateString('pt-BR');
-        return dataItem === dataFiltro;
-      })
-    : [];
+  const dadosDoDia = dataSelecionada ? dadosTabela.filter((item) => {
+    const dataItem = new Date(item.Data).toLocaleDateString('pt-BR');
+    const dataFiltro = new Date(dataSelecionada).toLocaleDateString('pt-BR');
+    return dataItem === dataFiltro;
+  }) : [];
 
   return {
     dadosGrafico,

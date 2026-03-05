@@ -16,7 +16,8 @@ export class DashboardService {
         cl.nomfan as Loja, 
         c.numsai as NumSaida, 
         c.datsai as Data, 
-        c.valtot as ValorTotal
+        c.valtot as ValorTotal,
+        SUM(c.valtot) OVER () as ValorGeral
       FROM cadsai c
       INNER JOIN cadcli cl ON c.codcli = cl.codcli
       WHERE c.datsai BETWEEN @dataInicio AND @dataFim

@@ -18,19 +18,18 @@ export const useLogin = () => {
 
     try {
       const data = await AuthService.login(apelid, senha);
-      // No seu useLogin.ts, dentro do handleLogin:
 
-      console.log("📦 Dados que chegaram do Back-end:", data);
       if (data.sucesso) {
+        // Salvamos apenas os dados do usuário. O "token" está seguro no Cookie.
         const usuarioParaSalvar = {
-          ...data.usuario,
-          token: data.token // Agora o dado existe vindo do back!
+          ...data.usuario, 
         };
+        
         setUser(usuarioParaSalvar);
         navigate("/dashboards");
       }
     } catch (error: any) {
-      setErrorMessage(error.response?.data?.message || "Usuário ou senha inválidos");
+      setErrorMessage(error.response?.data?.erro || "Erro ao fazer login");
     } finally {
       setLoading(false);
     }

@@ -10,8 +10,8 @@ export const RequireAuth: React.FC<RequireAuthProps> = ({ children }) => {
   const location = useLocation();
   const user = useAuthStore((state) => state.user);
 
-  // DEBUG: Veja o que está chegando aqui quando você tenta entrar no dashboard
-  if (!user || !user.token) {
+  // MUDANÇA: Não verificamos mais o token, apenas se o objeto user existe
+  if (!user) { 
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 

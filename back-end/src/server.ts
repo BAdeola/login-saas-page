@@ -2,15 +2,20 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import { router } from './routes/index.js';
-
-const app = express(); // 1. Primeiro definimos o app
-const port = process.env.PORT || 3333;
+import cookieParser from 'cookie-parser';
 
 // 2. Definimos as origens permitidas baseadas no seu .env
 const allowedOrigins = [
   process.env.FRONTEND_URL_HTTPS,
-  process.env.FRONTEND_URL_HTTP
+  process.env.FRONTEND_URL_HTTP,
+  'http://localhost:5173'
 ];
+const port = process.env.PORT || 3333;
+
+const app = express();
+
+app.use(express.json());
+app.use(cookieParser());
 
 // 3. Configuramos o CORS antes das rotas
 app.use(cors({
@@ -27,9 +32,6 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json()); // 4. Essencial para ler o corpo (body) das requisições POST
-
-// 5. Definimos o prefixo das rotas
 app.use('/api', router);
 
 app.listen(port, () => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAnaliseSintetica } from './hooks/useAnaliseSintetica';
+import { useAnaliseSintetica } from './hooks/useAnaliseGraficos';
 import { type GraficosProps } from './interfaces';
 
 // Importando os componentes refatorados
