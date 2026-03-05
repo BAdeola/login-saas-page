@@ -8,8 +8,8 @@ import cookieParser from 'cookie-parser';
 const allowedOrigins = [
   process.env.FRONTEND_URL_HTTPS,
   process.env.FRONTEND_URL_HTTP,
-  'http://localhost:5173'
 ];
+
 const port = process.env.PORT || 3333;
 
 const app = express();

@@ -21,10 +21,7 @@ export const useLogin = () => {
 
       if (data.sucesso) {
         // Salvamos apenas os dados do usuário. O "token" está seguro no Cookie.
-        const usuarioParaSalvar = {
-          ...data.usuario, 
-        };
-        
+        const usuarioParaSalvar = { ...data.usuario };
         setUser(usuarioParaSalvar);
         navigate("/dashboards");
       }

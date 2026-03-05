@@ -2,17 +2,13 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/auth/useAuthStore'; 
 
-interface RequireAuthProps {
-  children: React.ReactNode;
-}
-
-export const RequireAuth: React.FC<RequireAuthProps> = ({ children }) => {
+export const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const user = useAuthStore((state) => state.user);
 
-  // MUDANÇA: Não verificamos mais o token, apenas se o objeto user existe
+  // MUDANÇA AQUI: Tiramos o "!user.token"
   if (!user) { 
-    return <Navigate to="/" state={{ from: location }} replace />;
+    return <Navigate to="/dd/" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

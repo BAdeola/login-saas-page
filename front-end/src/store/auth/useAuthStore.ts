@@ -14,7 +14,7 @@ export const useAuthStore = create<AuthState>()(
         set({ user: null });
         
         // 3. Redirecionamento
-        window.location.href = '/'; 
+        window.location.href = '/dd/'; 
       },
     }),
     { 

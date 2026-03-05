@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useDashboardStore } from '../../../../../store/dashboard/useDashboardStore';
-import { useAuthStore } from '../../../../../store/auth/useAuthStore'; // ⬅️ Importamos o seu auth store!
+import { useAuthStore } from '../../../../../store/auth/useAuthStore';
 
 export const useDashboardSidebar = () => {
   const navigate = useNavigate();
@@ -28,9 +28,9 @@ export const useDashboardSidebar = () => {
   };
 
   const handleLogout = () => {
-    logout(); // ⬅️ Usamos a função oficial de logout do Zustand (que já limpa o localStorage)
+    logout();
     limparDados(); 
-    navigate('/'); 
+    navigate('/dd/'); 
   };
 
   return {

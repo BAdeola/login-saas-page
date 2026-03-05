@@ -25,10 +25,10 @@ export class LoginController {
 
         // 2. CONFIGURAR O COOKIE (A Mágica da Segurança)
         res.cookie('token', token, {
-          httpOnly: true, // Impede que scripts maliciosos (XSS) leiam o token
-          secure: process.env.NODE_ENV === 'production', // Só envia via HTTPS em produção
-          sameSite: 'lax', // Proteção básica contra CSRF
-          maxAge: 8 * 60 * 60 * 1000 // 8 horas em milissegundos
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production', // false no localhost, true no deploy (HTTPS)
+          sameSite: 'lax', 
+          maxAge: 8 * 60 * 60 * 1000
         });
 
         // 3. RETORNAR SÓ OS DADOS PÚBLICOS
